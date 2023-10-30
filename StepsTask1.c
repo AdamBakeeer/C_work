@@ -43,18 +43,32 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
+    FITNESS_DATA fit;
     char filename [] ="FitnessData_2023.csv";
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         perror("");
         return 1;
     }
-
+    int count = 0;
     int size = 1000;
     char file_size[size];
     while(fgets(file_size, size, file)) {
-    printf("%s", file_size);
+        count = count + 1;
+        tokeniseRecord(file_size, "," , fit.date, fit.time, fit.steps);
+        if (count < 3){
+            printf("%s/%s/%d\n", fit.date, fit.time, atoi(fit.steps));
+        }
+
+
     }
+    printf("Number of record in file: %d\n", count);
+    
+
+    
     fclose(file);
     return 0;
 }
+
+
+
