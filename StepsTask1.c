@@ -51,15 +51,21 @@ int main() {
         return 1;
     }
     int count = 0;
+    int totalrecords = 0;
     int file_size = 100;
     char file_line[file_size];
+   
     while(fgets(file_line, file_size, file) != NULL){
-        count = count + 1;
-        tokeniseRecord(file_line, ",", fit.date, fit.time, fit.steps);
-        printf("%s/%s/%s", fit.date, fit.time, fit.steps);
-        }
+        if (count < 3) {
+            count = count + 1;
+            tokeniseRecord(file_line, ",", fit.date, fit.time, fit.steps);
+            printf("%s/%s/%s", fit.date, fit.time, fit.steps);
+        } 
+        
+        totalrecords = totalrecords + 1;
+    }
     
-    printf("Number of records in file: %d\n", count);
+    printf("Number of records in file: %d\n", totalrecords);
     fclose(file);
     return 0;
 
