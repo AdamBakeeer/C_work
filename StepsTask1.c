@@ -54,7 +54,16 @@ int main() {
     int totalrecords = 0;
     int file_size = 100;
     char file_line[file_size];
-   
+    
+    while (fgets(file_line, file_size, file) != NULL) {
+        totalrecords = totalrecords + 1;
+    }
+
+    printf("Number of records in file: %d\n", totalrecords);
+    
+    fclose(file);
+    file = fopen(filename, "r");
+    
     while(fgets(file_line, file_size, file) != NULL){
         if (count < 3) {
             count = count + 1;
@@ -64,11 +73,8 @@ int main() {
             
             printf("%s/%s/%d\n", fit.date, fit.time, steps);
         } 
-        
-        totalrecords = totalrecords + 1;
     }
-    
-    printf("Number of records in file: %d\n", totalrecords);
+
     fclose(file);
     return 0;
 
