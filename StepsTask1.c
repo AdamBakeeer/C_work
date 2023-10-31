@@ -59,7 +59,10 @@ int main() {
         if (count < 3) {
             count = count + 1;
             tokeniseRecord(file_line, ",", fit.date, fit.time, fit.steps);
-            printf("%s/%s/%s", fit.date, fit.time, fit.steps);
+            
+            int steps = atoi(fit.steps);
+            
+            printf("%s/%s/%d\n", fit.date, fit.time, steps);
         } 
         
         totalrecords = totalrecords + 1;
