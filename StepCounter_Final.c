@@ -43,7 +43,9 @@ void tokeniseRecord(const char *input, const char *delimiter,
 // Complete the main function
 int main() {
     char mychar;
-    char fname; // variable to store file name
+    char fname[100]; // variable to store file name
+    char filename[] = "FitnessData_2023.csv";
+    
 
     printf("Enter Choice:\n");
     scanf("%c", &mychar);
@@ -51,12 +53,23 @@ int main() {
     switch(mychar){
         case 'A':
             printf("Input file name:\n");
-            scanf("%c", &fname);
-            
+            scanf("%s", fname);
+            if (strcmp(fname, filename) == 0){
+                FILE *file = fopen(filename, "r");
+                if (file != NULL){
+                    printf("File successfully loaded\n");
+
+                    fclose(file);
+                }
+            } else {
+                printf("Error: could not open file\n");
+            }
             break;
+            }
+            
     }
-   printf("File name: %c \n", fname);
-}
+   
+
 
 
 
