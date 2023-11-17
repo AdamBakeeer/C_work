@@ -42,7 +42,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
-    
+    char file_name[100];
     char mychar;
 
     printf("Menu Options:\n");
@@ -58,7 +58,15 @@ int main() {
 
     switch (mychar)
     {
-        case "A"; 
+        case "A": 
+        printf("Input filename:\n");
+        scanf("%s", file_name);
+        FILE *file = fopen(file_name, "r");
+        if (file == NULL) {
+            perror("");
+            return 1;
+        }
+        break;
     }
 
    
