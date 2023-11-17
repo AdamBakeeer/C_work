@@ -42,31 +42,28 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
+    
     char mychar;
-    char fname[100]; // variable to store file name
-    char filename[] = "FitnessData_2023.csv";
-    
 
-    printf("Enter Choice:\n");
+    printf("Menu Options:\n");
+    printf("A: Specify he filename to be imported\n");
+    printf("B: Display the total number of records in the file\n");
+    printf("C: Find the date and time of the timeslot with the fewest steps\n");
+    printf("D: Find the date and time of the timeslot with the largest number of steps\n");
+    printf("E: Find the mean step count of all the records in the file\n");
+    printf("F: Find the longest continuous period where the step count is above 500 steps\n");
+    printf("Q: Quit\n");
+    printf("Enter choice:\n");
     scanf("%c", &mychar);
-    
-    switch(mychar){
-        case 'A':
-            printf("Input file name:\n");
-            scanf("%s", fname);
-            if (strcmp(fname, filename) == 0){
-                FILE *file = fopen(filename, "r");
-                if (file != NULL){
-                    printf("File successfully loaded\n");
 
-                    fclose(file);
-                }
-            } else {
-                printf("Error: could not open file\n");
-            }
-            break;
-            }
-            
+    switch (mychar)
+    {
+        case "A"; 
+    }
+
+   
+    
+
     }
    
 
