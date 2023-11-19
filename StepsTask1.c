@@ -65,8 +65,9 @@ int main() {
     file = fopen(filename, "r");
     
     while(fgets(file_line, file_size, file) != NULL){
-        if (count < 3) {
-            count = count + 1;
+        count = count + 1;
+        if (count <= 3) {
+            
             tokeniseRecord(file_line, ",", fit.date, fit.time, fit.steps);
             
             int steps = atoi(fit.steps);

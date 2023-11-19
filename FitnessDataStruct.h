@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 
+#define buffer_size 100
+
 // Define an appropriate struct
 typedef struct {
 	char date[11];
