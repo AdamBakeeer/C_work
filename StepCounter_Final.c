@@ -114,6 +114,46 @@ int main() {
                 }
             }
             break;
+
+            case 'D':
+            rewind(file);
+            int records = 0;
+            int max = INT_MIN;
+            while (fgets(line, buffer_size, file) != NULL) {
+                tokeniseRecord(line, ",", fit[records].date , fit[records].time, fit[records].steps);
+                int step = atoi(fit[records].steps);
+
+                if (step > max) {
+                    max = step;
+                }
+                records ++;
+            }
+            for (int i = 0; i < records; i++) { 
+                int steps = atoi(fit[i].steps);
+                if (steps == max)
+                {
+                    printf("Largest steps: %s %s\n", fit[i].date, fit[i].time);
+                }
+            }
+            break;
+
+            case 'E':
+            rewind(file);
+            int count = 0;
+            int totalrecord = 0;
+            int mean = 0;
+            while (fgets(line, buffer_size, file) != NULL) {
+                tokeniseRecord(line, ",", fit[records].date , fit[records].time, fit[records].steps);
+                int step = atoi(fit[records].steps);
+
+                count = count + step;
+                totalrecord++;
+            }
+            mean = count / totalrecord;
+
+            printf("Mean step count: %d\n", mean);
+            break;
+
             
 
 
