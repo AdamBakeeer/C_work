@@ -51,7 +51,6 @@ int main() {
     char file_name[buffer_size];
     int totalrecords = 0;
     FITNESS_DATA fit[100];
-    int record = 0;
     int min = INT_MAX;
     FILE *file = NULL;
     
@@ -96,17 +95,20 @@ int main() {
 
             case 'C':
             rewind(file);
+            int record = 0;
+            int min = INT_MAX;
             while (fgets(line, buffer_size, file) != NULL) {
-                sscanf(line, "%s,%s,%d", fit[record].date, fit[record].time, &fit[record].steps);
-                
-                if (fit[record].steps < min)
-                {
-                    min = fit[record].steps;
+                tokeniseRecord(line, ",", fit[record].date , fit[record].time, fit[record].steps);
+                int step = atoi(fit[record].steps);
+
+                if (step < min) {
+                    min = step;
                 }
-                record ++;
+                record ++; 
             }
-            for (int i =0; i < record; i++){
-                if (fit[i].steps == min)
+            for (int i = 0; i < record; i++) {
+                int steps = atoi(fit[i].steps);
+                if (steps == min)
                 {
                     printf("Fewest steps: %s %s\n", fit[i].date, fit[i].time);
                 }
