@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
 #include "FitnessDataStruct.h"
+#include <limits.h>
 
 // Struct moved to header file
 
@@ -51,11 +51,9 @@ int main() {
     char file_name[buffer_size];
     int totalrecords = 0;
     FITNESS_DATA fit[100];
-    char min_date[buffer_size];
-    char min_time[buffer_size];
+    int record = 0;
+    int min = INT_MAX;
     FILE *file = NULL;
-    int min_steps = INT_MAX;
-    
     
     while(1) {
         printf("Menu Options:\n");
@@ -86,10 +84,10 @@ int main() {
             } else {
                 printf("File successfully loaded.\n");
                 }
-            break;
+                break;
 
-            case 'B': 
-            totalrecords = 0;
+            case 'B':
+            rewind(file);
             while (fgets(line, buffer_size, file) != NULL) {
             totalrecords++ ;
             }
@@ -98,32 +96,34 @@ int main() {
 
             case 'C':
             rewind(file);
-            
-            totalrecords = 0;
-            while (fgets(line, buffer_size, file) != NULL){
-                tokeniseRecord(line, " , ", fit[totalrecords].date, fit[totalrecords].time, fit[totalrecords].steps);
+            while (fgets(line, buffer_size, file) != NULL) {
+                sscanf(line, "%s,%s,%d", fit[record].date, fit[record].time, &fit[record].steps);
                 
-                int step = atoi(fit[totalrecords].steps);
-
-                if (step < min_steps){
-                    min_steps = step;
-                    strcpy(min_date, fit[totalrecords].date);
-                    strcpy(min_time, fit[totalrecords].time);
+                if (fit[record].steps < min)
+                {
+                    min = fit[record].steps;
                 }
-                totalrecords++;
+                record ++;
             }
-            if (min_steps !=  INT_MAX) {
-                printf("%s %s\n", min_date, min_time);
-            } else {
-                printf("No timeslot found.\n");
+            for (int i =0; i < record; i++){
+                if (fit[i].steps == min)
+                {
+                    printf("Fewest steps: %s %s\n", fit[i].date, fit[i].time);
+                }
             }
-            break; 
+            break;
+            
+
+
+
+            
+        fclose(file);      
         }
       
         
-        
+    
     }
-    fclose(file);
+    
     return 0;
     
 }
