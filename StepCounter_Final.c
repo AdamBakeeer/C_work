@@ -154,12 +154,10 @@ int main() {
             printf("Mean step count: %d\n", mean);
             break;
 
-            
+            case 'F':
+        
 
-
-
-            
-        fclose(file);      
+    fclose(file);      
         }
       
         
