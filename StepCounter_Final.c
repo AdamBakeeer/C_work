@@ -155,6 +155,9 @@ int main() {
             break;
 
             case 'F':
+            while (fgets(line, buffer_size, file) != NULL) {
+                tokeniseRecord(line, ",", fit[records].date , fit[records].time, fit[records].steps);
+                int step = atoi(fit[records].steps);
         
 
     fclose(file);      
