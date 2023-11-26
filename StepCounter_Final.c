@@ -45,7 +45,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
-    
+    int records = 0;
     char mychar;
     char line[buffer_size];
     char file_name[buffer_size];
@@ -53,7 +53,6 @@ int main() {
     FITNESS_DATA fit[100];
     int min = INT_MAX;
     FILE *file = NULL;
-    
     while(1) {
         printf("Menu Options:\n");
         printf("A: Specify he filename to be imported\n");
@@ -64,6 +63,7 @@ int main() {
         printf("F: Find the longest continuous period where the step count is above 500 steps\n");
         printf("Q: Quit\n");
         printf("Enter choice:\n");
+        
         mychar = getchar();
         while (getchar() != '\n');
 
@@ -76,7 +76,7 @@ int main() {
             sscanf(line, " %s ", file_name);
 
         
-            FILE *file = fopen(file_name, "r");
+            file = fopen(file_name, "r");
             if (file == NULL) {
                 printf("Error: Could not find or open the file.\n");
                 return 1;
@@ -117,7 +117,7 @@ int main() {
 
             case 'D':
             rewind(file);
-            int records = 0;
+            //int records = 0;
             int max = INT_MIN;
             while (fgets(line, buffer_size, file) != NULL) {
                 tokeniseRecord(line, ",", fit[records].date , fit[records].time, fit[records].steps);
@@ -155,23 +155,61 @@ int main() {
             break;
 
             case 'F':
+            rewind(file);
+            int longestStart = 0;
+            int longestEnd = 0;
+            int currentStart = 0;
+            int currentEnd = 0;
+            int num_recs = 0;
+            int longestDuration = 0;
+            int currentDuration = 0;
             while (fgets(line, buffer_size, file) != NULL) {
-                tokeniseRecord(line, ",", fit[records].date , fit[records].time, fit[records].steps);
-                int step = atoi(fit[records].steps);
-        
+                tokeniseRecord(line, ",", fit[num_recs].date , fit[num_recs].time, fit[num_recs].steps);
+                int step = atoi(fit[num_recs].steps);
+                
 
-    fclose(file);      
-        }
+                if (step > 500){
+                    if (currentDuration == 0){
+                        currentStart = num_recs;
+                    }
+                    currentDuration ++;
+                    currentEnd = num_recs;
+                } else {
+                    if (currentDuration > longestDuration) {
+                        longestDuration = currentDuration;
+                        longestStart = currentStart;
+                        longestEnd = currentEnd;
+                    }
+                    currentDuration = 0;
+                }
+                num_recs ++;
+            }
+
+            if (currentDuration > longestDuration) {
+                longestDuration = currentDuration;
+                longestStart = currentStart;
+                longestEnd = currentEnd;
+            }
+
+            printf("Longest period start: %s %s\n", fit[longestStart].date, fit[longestStart].time);
+            printf("Longest period end: %s %s\n", fit[longestEnd].date, fit[longestEnd].time);
+            break;
+
+            case 'Q':
+            case 'q':
+            fclose(file);
+            return 0;
+            break;
       
         
     
     }
     
-    return 0;
     
 }
-
-   
+fclose(file);
+    return 0;
+} 
     
 
     
