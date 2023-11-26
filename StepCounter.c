@@ -69,7 +69,9 @@ int main() {
 
         switch (mychar)
         {
-            case 'A': 
+            case 'A':
+            case 'a':
+            
             printf("Input filename:\n");
 
             fgets(line, buffer_size, stdin);
@@ -85,15 +87,19 @@ int main() {
                 }
                 break;
 
+            
             case 'B':
+            case 'b':
             rewind(file);
+            int totalrecords = 0;
             while (fgets(line, buffer_size, file) != NULL) {
-            totalrecords++ ;
+            totalrecords++;
             }
             printf("Number of records in file: %d\n", totalrecords);
             break;
 
             case 'C':
+            case 'c':
             rewind(file);
             int record = 0;
             int min = INT_MAX;
@@ -116,6 +122,7 @@ int main() {
             break;
 
             case 'D':
+            case 'd':
             rewind(file);
             //int records = 0;
             int max = INT_MIN;
@@ -138,6 +145,7 @@ int main() {
             break;
 
             case 'E':
+            case 'e':
             rewind(file);
             int count = 0;
             int totalrecord = 0;
@@ -149,12 +157,16 @@ int main() {
                 count = count + step;
                 totalrecord++;
             }
-            mean = count / totalrecord;
+            //mean = count / totalrecord;
+            if (totalrecord != 0) {
+                mean = (count + totalrecord / 2) / totalrecords;
+            }
 
             printf("Mean step count: %d\n", mean);
             break;
 
             case 'F':
+            case 'f':
             rewind(file);
             int longestStart = 0;
             int longestEnd = 0;

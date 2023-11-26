@@ -4,8 +4,8 @@
 
 #include <stdio.h>
 
-#define buffer_size 100
-#define MAX_RECORDS 100
+#define buffer_size 1000
+#define MAX_RECORDS 1000
 
 // Define an appropriate struct
 typedef struct {
