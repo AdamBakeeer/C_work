@@ -40,6 +40,7 @@ int main() {
     FILE *file = NULL;
     int records = 0;
     FitnessData fit[max_record];
+    char outputFilename[buffer_size];
     
     
     printf("Enter filename:\n");
@@ -72,12 +73,26 @@ int main() {
 
     qsort(fit, records, sizeof(FitnessData), comparator);
 
-    for (int i = 0; i < records; ++i) {
-        printf("%s\t%s\t%d\n", fit[i].date, fit[i].time, fit[i].steps);
+    //for (int i = 0; i < records; ++i) {
+        //printf("%s,%s,%d\n", fit[i].date, fit[i].time, fit[i].steps);
+    //}
+    strcpy(outputFilename, filename);
+    strcat(outputFilename, ".tsv");
 
-    char filename [] = "data.txt"
-    
-}
+    //printf("%s\n", outputFilename);
+    FILE *output_file = fopen(outputFilename, "w");
+    if (output_file == NULL) {
+        printf("Error creating the output file.\n");
+        return 1;
+    }
+    fprintf(output_file, "%s\n", outputFilename);
+
+    for (int i = 0; i < records; i++) {
+        fprintf(output_file, "%s\t%s\t%d\n", fit[i].date, fit[i].time, fit[i].steps);
+    }
+    fclose(output_file);
+
+
 return 0;
 }
 
