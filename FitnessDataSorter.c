@@ -92,6 +92,8 @@ int main() {
     }
     fclose(output_file);
 
+    printf("Data sorted and written to %s\n", outputFilename);
+
 
 return 0;
 }
