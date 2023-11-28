@@ -11,7 +11,7 @@
 typedef struct {
 	char date[11];
 	char time[6];
-	char steps[5];
+	char steps[10];
 } FITNESS_DATA;
 
 // Helper function prototypes
