@@ -43,7 +43,7 @@ int main() {
     char outputFilename[buffer_size];
     
     
-    printf("Enter filename:\n");
+    printf("Enter filename: ");
     fgets(line, buffer_size, stdin);
     sscanf(line, " %s ", filename);
 
@@ -58,37 +58,41 @@ int main() {
         
         if (fit[records].steps <= 0) {
             printf("Error: invalid file\n");
+            return 1;
         }
 
         if (strlen(fit[records].date) == 0) {
             printf("Error: invalid file\n");
+            return 1;
         }
 
         if (strlen(fit[records].time) == 0) {
             printf("Error: invalid file\n");
+            return 1;
         }
         records++;
+        
     }
     fclose(file);
 
     qsort(fit, records, sizeof(FitnessData), comparator);
 
-    //for (int i = 0; i < records; ++i) {
-        //printf("%s,%s,%d\n", fit[i].date, fit[i].time, fit[i].steps);
-    //}
+    
     strcpy(outputFilename, filename);
     strcat(outputFilename, ".tsv");
 
-    //printf("%s\n", outputFilename);
+    
     FILE *output_file = fopen(outputFilename, "w");
     if (output_file == NULL) {
         printf("Error creating the output file.\n");
         return 1;
     }
-    fprintf(output_file, "%s\n", outputFilename);
+    //fprintf(output_file, "%s", outputFilename);
 
     for (int i = 0; i < records; i++) {
-        fprintf(output_file, "%s\t%s\t%d\n", fit[i].date, fit[i].time, fit[i].steps);
+        char steps[20];
+        snprintf(steps, sizeof(steps), "%d", fit[i].steps);
+        fprintf(output_file, "%s\t%s\t%s\n", fit[i].date, fit[i].time, steps);
     }
     fclose(output_file);
 

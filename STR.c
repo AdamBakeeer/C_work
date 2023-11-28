@@ -10,8 +10,6 @@
 // Global variables for filename and FITNESS_DATA array
 
 
-
-
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
@@ -45,14 +43,24 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
-    int records = 0;
+    
     char mychar;
     char line[buffer_size];
     char file_name[buffer_size];
-    int totalrecords = 0;
-    FITNESS_DATA fit[100];
-    int min = INT_MAX;
     FILE *file = NULL;
+    FITNESS_DATA fit[100];
+    int totalrecords = 0;
+    int min = INT_MAX;
+    int max = INT_MIN;
+    int count = 0;
+    int mean = 0;
+    int longestStart = 0;
+    int longestEnd = 0;
+    int currentStart = 0;
+    int currentEnd = 0;
+    int longestDuration = 0;
+    int currentDuration = 0;
+    
     while(1) {
         printf("Menu Options:\n");
         printf("A: Specify he filename to be imported\n");
@@ -62,7 +70,7 @@ int main() {
         printf("E: Find the mean step count of all the records in the file\n");
         printf("F: Find the longest continuous period where the step count is above 500 steps\n");
         printf("Q: Quit\n");
-        printf("Enter choice:\n");
+        printf("Enter choice: ");
         
         mychar = getchar();
         while (getchar() != '\n');
@@ -72,7 +80,7 @@ int main() {
             case 'A':
             case 'a':
             
-            printf("Input filename:\n");
+            printf("Input filename: ");
 
             fgets(line, buffer_size, stdin);
             sscanf(line, " %s ", file_name);
@@ -84,82 +92,70 @@ int main() {
                 return 1;
             } else {
                 printf("File successfully loaded.\n");
-                }
-                break;
+            }
+            totalrecords = 0;
+            while (fgets(line, buffer_size, file) != NULL) {
+                tokeniseRecord(line, ",", fit[totalrecords].date , fit[totalrecords].time, fit[totalrecords].steps);
+                //int step = atoi(fit[totalrecords].steps);
+                totalrecords++;
+            }
+            fclose(file);
+            break;
 
-            
             case 'B':
             case 'b':
-            rewind(file);
-            int totalrecords = 0;
-            while (fgets(line, buffer_size, file) != NULL) {
-            totalrecords++;
-            }
             printf("Number of records in file: %d\n", totalrecords);
+
             break;
 
             case 'C':
             case 'c':
-            rewind(file);
-            int record = 0;
-            int min = INT_MAX;
-            while (fgets(line, buffer_size, file) != NULL) {
-                tokeniseRecord(line, ",", fit[record].date , fit[record].time, fit[record].steps);
-                int step = atoi(fit[record].steps);
-
-                if (step < min) {
+            min = INT_MAX;
+            for (int i = 0; i < totalrecords; i++) {
+                int step = atoi(fit[i].steps);
+                if (step < min){
                     min = step;
                 }
-                record ++; 
             }
-            for (int i = 0; i < record; i++) {
-                int steps = atoi(fit[i].steps);
-                if (steps == min)
-                {
+            
+            for (int i = 0; i < totalrecords; i++) {
+                int step = atoi(fit[i].steps);
+                if (step == min) {
                     printf("Fewest steps: %s %s\n", fit[i].date, fit[i].time);
                 }
             }
+
             break;
 
             case 'D':
             case 'd':
-            rewind(file);
-            //int records = 0;
-            int max = INT_MIN;
-            while (fgets(line, buffer_size, file) != NULL) {
-                tokeniseRecord(line, ",", fit[records].date , fit[records].time, fit[records].steps);
-                int step = atoi(fit[records].steps);
-
-                if (step > max) {
+            for (int i = 0; i < totalrecords; i++) {
+                int step = atoi(fit[i].steps);
+                if (step > max){
                     max = step;
                 }
-                records ++;
             }
-            for (int i = 0; i < records; i++) { 
-                int steps = atoi(fit[i].steps);
-                if (steps == max)
-                {
+
+            for (int i = 0; i < totalrecords; i++) {
+                int step = atoi(fit[i].steps);
+                if (step == max) {
                     printf("Largest steps: %s %s\n", fit[i].date, fit[i].time);
                 }
             }
+
             break;
 
             case 'E':
             case 'e':
-            rewind(file);
-            int count = 0;
-            int totalrecord = 0;
-            int mean = 0;
-            while (fgets(line, buffer_size, file) != NULL) {
-                tokeniseRecord(line, ",", fit[records].date , fit[records].time, fit[records].steps);
-                int step = atoi(fit[records].steps);
-
-                count = count + step;
-                totalrecord++;
+            count = 0;
+            for (int i = 0; i < totalrecords; i++) {
+                int step = atoi(fit[i].steps);
+                count += step;
             }
-            //mean = count / totalrecord;
-            if (totalrecord != 0) {
-                mean = (count + totalrecord / 2) / totalrecords;
+
+            if (totalrecords != 0) {
+                //mean = (count + totalrecords / 2) / totalrecords;
+                mean = count / totalrecords;
             }
 
             printf("Mean step count: %d\n", mean);
@@ -167,25 +163,15 @@ int main() {
 
             case 'F':
             case 'f':
-            rewind(file);
-            int longestStart = 0;
-            int longestEnd = 0;
-            int currentStart = 0;
-            int currentEnd = 0;
-            int num_recs = 0;
-            int longestDuration = 0;
-            int currentDuration = 0;
-            while (fgets(line, buffer_size, file) != NULL) {
-                tokeniseRecord(line, ",", fit[num_recs].date , fit[num_recs].time, fit[num_recs].steps);
-                int step = atoi(fit[num_recs].steps);
-                
 
-                if (step > 500){
-                    if (currentDuration == 0){
-                        currentStart = num_recs;
+            for (int i = 0; i < totalrecords; i++) {
+                int step = atoi(fit[i].steps);
+                if (step > 500) {
+                    if (currentDuration == 0) {
+                        currentStart = i;
                     }
                     currentDuration ++;
-                    currentEnd = num_recs;
+                    currentEnd = i;
                 } else {
                     if (currentDuration > longestDuration) {
                         longestDuration = currentDuration;
@@ -194,9 +180,7 @@ int main() {
                     }
                     currentDuration = 0;
                 }
-                num_recs ++;
             }
-
             if (currentDuration > longestDuration) {
                 longestDuration = currentDuration;
                 longestStart = currentStart;
@@ -209,24 +193,16 @@ int main() {
 
             case 'Q':
             case 'q':
-            fclose(file);
             return 0;
-            break;
-      
-        
-    
+            
+
+            default: 
+            printf("Invalid choice. Try again.\n");
+
+
+        }
     }
-    
-    
-}
-fclose(file);
-    return 0;
-} 
-    
-
-    
-   
-
+}    
 
 
 
